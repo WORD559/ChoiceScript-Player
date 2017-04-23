@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <link rel="stylesheet" href="style.css">
+    <meta charset="UTF-8">
+    <title>ChoiceScript Player</title>
+  </head>
+  <body>
+    <script>
+    const fs = require('fs')
+    function getDirectories(path) {
+        return fs.readdirSync(path).filter(function (file) {
+            return fs.statSync(path+'/'+file).isDirectory();
+        });
+    }
+    function getExists(path) {
+        return fs.existsSync(path);
+    }
+    function getName(path) {
+        return fs.readFileSync(path);
+    }
+    </script>
+    <h1 class="gameTitle">ChoiceScript Player</h1>
+    <h2 class="gameTitle">By WORD559</h2>
+    <br>
+    <input value="Select Games Folder" type="file" id="file_input" webkitdirectory="" directory="" onChange="refresh(event)">
+    <h3 id="path"></h3>
+    <h2>Available Games</h2>
+    <p id="games"></p>
+    <script>
+    function refresh(e) {
+        var path = e.target.files[0].path + "\\";
+        document.getElementById("path").innerHTML = path;
+        var games = [];
+        var dirs = getDirectories(path);
+        for (var i = 0; i < dirs.length; i++) {
+            if (fs.existsSync(path+dirs[i]+"/index.html")) {
+                if (fs.existsSync(path+dirs[i]+"/name.txt")) {
+                    //games.push([dirs[i],getName(dirs[i]+"/name.txt")]);
+                    document.getElementById("games").innerHTML += "<a href='file:///"+path+dirs[i]+"\\index.html'>"+getName(path+dirs[i]+"/name.txt")+"</a><br>";
+                } else {
+                    document.getElementById("games").innerHTML += "<a href='file:///"+path+dirs[i]+"\\index.html'>"+dirs[i]+"</a><br>";
+                }
+            }
+        }
+    }
+    </script>
+  </body>
+
+  
+</html>
